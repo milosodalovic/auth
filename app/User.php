@@ -23,4 +23,14 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    /**
+     * @param $query
+     * @return mixed
+     */
+    public function scopeNotConfirmed($query)
+    {
+        return $query->where('confirmed',0);
+    }
+
 }
