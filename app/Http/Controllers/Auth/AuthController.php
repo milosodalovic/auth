@@ -34,7 +34,7 @@ class AuthController extends Controller
      *
      * @var boolean
      */
-    protected $isUsingEmailConfirmation = false;
+    protected $isUsingEmailConfirmation = true;
 
     /**
      * Create a new authentication controller instance.
