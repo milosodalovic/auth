@@ -6,7 +6,6 @@ use App\User;
 use Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
-use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
 
 class AuthController extends Controller
 {
@@ -29,6 +28,13 @@ class AuthController extends Controller
      * @var string
      */
     protected $redirectTo = '/';
+
+    /**
+     * Specify whether Email confirmation is required after registration
+     *
+     * @var boolean
+     */
+    protected $isUsingEmailConfirmation = false;
 
     /**
      * Create a new authentication controller instance.
