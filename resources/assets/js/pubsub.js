@@ -1,3 +1,6 @@
+// Simple jQuery eventing system. JS can publish events
+// and subscribe or unsubscribe from listening for them
+
 (function($) {
 
     var o = $({});

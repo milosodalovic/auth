@@ -1,9 +1,11 @@
-(function() {
+//(function() {
 
-    // Subscribe to the form.submitted event. When event fires, show the flash
-    // message by finding the .flash element and showing it for one second
-    $.subscribe('form.submitted', function() {
-        $('.flash').fadeIn(500).delay(1000).fadeOut(500);
-    });
+    // // Subscribe to the 'success' event. When event fires do something
+    // $.subscribe('success', function() {
+    //    //do something
+    // });
 
-})();
+    // // Publish to the 'success' event and pass the JQuery object
+    // $.publish('success', object);
+
+//})();

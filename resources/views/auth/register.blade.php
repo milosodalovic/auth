@@ -95,7 +95,7 @@
 </div>
 @endsection
 
-@section('script')
+@section('scripts')
     <script type="text/javascript">
         var first_name = $('input[name=first_name]').parsley();
         var last_name = $('input[name=last_name]').parsley();

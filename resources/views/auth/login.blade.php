@@ -66,7 +66,7 @@
 
 @endsection
 
-@section('script')
+@section('scripts')
     <script type="text/javascript">
         var email = $('input[name=email]').parsley();
         var password = $('input[name=password]').parsley();

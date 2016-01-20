@@ -20,6 +20,7 @@ elixir(function(mix) {
             'lib/bootstrap.min.css',
             'lib/font-awesome.min.css',
             'lib/parsley.css',
+            'lib/sweetalert.css',
             'app.css',
         ],'public/css/all.css')
 
@@ -27,6 +28,7 @@ elixir(function(mix) {
             'lib/jquery.min.js',
             'lib/bootstrap.min.js',
             'lib/parsley.min.js',
+            'lib/sweetalert-dev.js',
             'pubsub.js',
             'ajax-helpers.js',
             'app.js',
