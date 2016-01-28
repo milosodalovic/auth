@@ -67,11 +67,14 @@ trait RegistersUsers
         $user = $this->create($request->all());
 
         if($this->isUsingEmailConfirmation){
-            $this->sendConfirmLinkEmail($user);
+            $user->token = str_random(30);
+            $user->save();
+
+            $this->sendConfirmationEmail($user);
             return view('auth.confirm', compact('user'));
         }
 
-        $user->confirmed = 1;
+        $user->confirmed = true;
         $user->save();
         Auth::guard($this->getGuard())->login($user);
 
@@ -79,36 +82,22 @@ trait RegistersUsers
     }
 
     /**
-     * Handle a confirm registration request
+     * Handle a confirm registration request.
+     * Find the user to be confirmed and update it.
      *
+     * @param $token
      * @param Request $request
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function getConfirmRegistration(Request $request)
-    {
-        if($request->has('token'))
-        {
-            $this->confirmUser($request);
-        }
-
-        return redirect('/');
-    }
-
-    /**
-     * Find the user to be confirmed and update it
-     *
-     * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
-     */
-    public function confirmUser(Request $request)
+    public function confirmRegistration($token, Request $request)
     {
         $unconfirmedUsers = User::notConfirmed()->get();
-        $token = $request->get('token');
 
         foreach($unconfirmedUsers as $user){
-            if(Hash::check($user->email, $token))
+            if($user->token == $token)
             {
-                $user->confirmed = 1;
+                $user->confirmed = true;
+                $user->token = null;
                 $user->save();
                 Auth::guard($this->getGuard())->login($user);
 
@@ -120,15 +109,13 @@ trait RegistersUsers
     }
 
     /**
-     * Send confirmation link to the User
+     * Send email confirmation email to the User
      *
      * @param $user
      */
-    public function sendConfirmLinkEmail($user)
+    public function sendConfirmationEmail($user)
     {
-        $confirmAccountLink = url('confirm-account') . '?token=' . Hash::make($user->email);
-
-        Mail::queue(['text' => 'auth.emails.confirm'], compact('user','confirmAccountLink'), function($message) use ($user) {
+        Mail::queue(['html' => 'auth.emails.confirm'], compact('user'), function($message) use ($user) {
             $message->to($user->email);
             $message->from(env('MAIL_FROM',null),env('MAIL_NAME',null));
             $message->subject('Account Confirmation');

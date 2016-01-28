@@ -15,7 +15,7 @@ Route::group(['middleware' => 'web'], function () {
     Route::auth();
 
     // Additional Confirm Registration page route
-    $this->get('confirm-account', 'Auth\AuthController@getConfirmRegistration');
+    $this->get('/register/confirm/{token}', 'Auth\AuthController@confirmRegistration');
 
     // Pages
     Route::get('/', function () {

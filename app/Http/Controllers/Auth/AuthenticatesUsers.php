@@ -87,7 +87,7 @@ trait AuthenticatesUsers
                 return $this->handleUserWasAuthenticated($request, $throttles);
             }
 
-            $this->sendConfirmLinkEmail($user);
+            $this->sendConfirmationEmail($user);
             return view('auth.confirm', compact('user'));
         }
 
