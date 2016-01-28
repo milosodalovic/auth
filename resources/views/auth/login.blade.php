@@ -84,7 +84,9 @@
         });
 
         $('form').submit(function(){
-            $(this).find(':submit').attr('disabled','disabled');
+            if(email.isValid() && password.isValid()){
+                $(this).find(':submit').attr('disabled','disabled');
+            }
         });
     </script>
 @stop

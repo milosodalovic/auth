@@ -134,7 +134,11 @@
         });
 
         $('form').submit(function(){
-            $(this).find(':submit').attr('disabled','disabled');
+            if(first_name.isValid() && last_name.isValid() && email.isValid()
+                    && password.isValid() && password_confirmation.isValid()) {
+
+                $(this).find(':submit').attr('disabled','disabled');
+            }
         });
     </script>
 @stop
