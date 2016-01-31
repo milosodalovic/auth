@@ -20,27 +20,38 @@ class AuthTest extends TestCase
              ->type('Doe','last_name')
              ->type('john.doe@example.com','email')
              ->type('password','password')
+             ->type('password','password_confirmation')
              ->press('Register');
 
-        $this->see('Verify your email address')
-             ->seeInDatabase('users',['email' => 'john.doe@example.com', 'verified' => '0']);
+        $this->see('Verify your email address to access the application')
+             ->seeInDatabase('users',['email' => 'john.doe@example.com', 'confirmed' => '0']);
 
         $user = User::whereEmail('john.doe@example.com')->first();
 
-        $this->login($user)->see('Could not sign you in');
+        $this->login($user)->see('Verify your email address to access the application');
 
         $this->visit("register/confirm/{$user->token}")
-             ->see('You are now confirmed')
-             ->seeInDatabase('users',['email' => 'john.doe@example.com', 'verified' => '1']);
+             ->see('Landing Page')
+             ->seeInDatabase('users',['email' => 'john.doe@example.com', 'confirmed' => '1']);
     }
 
+    /**
+     * @test Login user test
+     */
     public function a_user_may_login()
     {
-        $this->login()->see('You are now logged in');
+        $this->login()->see('Landing Page');
     }
 
     protected function login($user = null)
     {
-        $user = $user ?: $this->factory->create('App\User',['password' => bcrypt('password')]);
+        $user = $user ?: factory(User::class)->create(['password' => bcrypt('password')]);
+
+        $this->visit('login')
+             ->type($user->email,'email')
+             ->type('password','password')
+             ->press('Login');
+
+        return $this;
     }
 }
