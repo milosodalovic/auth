@@ -12,10 +12,27 @@
 */
 
 Route::group(['middleware' => 'web'], function () {
-    Route::auth();
+
+    // Authentication Routes...
+    Route::get('login', 'Auth\AuthController@showLoginForm');
+    Route::post('login', 'Auth\AuthController@login');
+    Route::get('logout', 'Auth\AuthController@logout');
+
+    // Registration Routes...
+    Route::get('register', 'Auth\AuthController@showRegistrationForm');
+    Route::post('register', 'Auth\AuthController@register');
+
+    // Password Reset Routes...
+    Route::get('password/reset/{token?}', 'Auth\PasswordController@showResetForm');
+    Route::post('password/email', 'Auth\PasswordController@sendResetLinkEmail');
+    Route::post('password/reset', 'Auth\PasswordController@reset');
 
     // Additional Confirm Registration page route
-    $this->get('/register/confirm/{token}', 'Auth\AuthController@confirmRegistration');
+    Route::get('/register/confirm/{token}', 'Auth\AuthController@confirmRegistration');
+
+    // oAuth routes
+    Route::get('google', 'Auth\AuthController@redirectToProvider');
+    Route::get('google/callback', 'Auth\AuthController@handleProviderCallback');
 
     // Pages
     Route::get('/', function () {

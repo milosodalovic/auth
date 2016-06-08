@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\User;
+use Laravel\Socialite\Facades\Socialite;
 use Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
@@ -77,4 +78,43 @@ class AuthController extends Controller
             'password' => bcrypt($data['password']),
         ]);
     }
+
+    /**
+     * Redirect the user to the Google Plus authentication page.
+     *
+     * @return Response
+     */
+    public function redirectToProvider()
+    {
+        return Socialite::driver('google')->redirect();
+    }
+
+    /**
+     * Obtain the user information from Google.
+     *
+     * @return Response
+     */
+    public function handleProviderCallback()
+    {
+        $socialUser = Socialite::driver('google')->user();
+
+        //Check is this email present
+        $userCheck = User::where('email', '=', $socialUser->email)->first();
+
+        if($userCheck)
+        {
+            $user = $userCheck;
+        }
+        else
+        {
+            $user = User::firstOrCreate([
+                'name'  => $socialUser->name,
+                'email' => $socialUser->email
+            ]);
+        }
+
+        Auth::login($user, true);
+        return redirect()->intended('home');
+    }
+
 }
