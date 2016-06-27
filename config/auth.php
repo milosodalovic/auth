@@ -104,4 +104,14 @@ return [
         ],
     ],
 
+    /**
+     * List of allowed Social Providers
+     */
+    'social_providers' => [
+        'linkedin',
+        'google',
+        'facebook',
+        'twitter',
+    ],
+
 ];

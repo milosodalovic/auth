@@ -41,7 +41,7 @@ class AuthController extends Controller
     /**
      * Create a new authentication controller instance.
      *
-     * @return void
+     * AuthController constructor.
      */
     public function __construct()
     {
@@ -56,12 +56,16 @@ class AuthController extends Controller
      */
     protected function validator(array $data)
     {
+        $messages = [
+            'g-recaptcha-response.required' => 'Captcha is required!',
+        ];
+
         return Validator::make($data, [
-            'first_name' => 'required|max:255',
-            'last_name' => 'required|max:255',
+            'name' => 'required|max:255',
             'email' => 'required|email|max:255|unique:users',
             'password' => 'required|confirmed|min:6',
-        ]);
+            'g-recaptcha-response' => 'required',
+        ], $messages);
     }
 
     /**
@@ -73,49 +77,86 @@ class AuthController extends Controller
     protected function create(array $data)
     {
         return User::create([
-            'first_name' => $data['first_name'],
-            'last_name' => $data['last_name'],
+            'name' => $data['name'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
         ]);
     }
 
     /**
-     * Redirect the user to the Google Plus authentication page.
+     * Redirect the user to the provider authentication page.
      *
-     * @return Response
+     * @param $provider
+     * @return mixed
      */
-    public function redirectToProvider()
+    public function redirectToProvider($provider)
     {
-        return Socialite::driver('google')->redirect();
+        if( ! in_array($provider, config('auth.social_providers'))) {
+            abort(403);
+        }
+
+        return Socialite::driver($provider)->redirect();
     }
 
     /**
-     * Obtain the user information from Google.
+     * Obtain the user information from the provider.
      *
-     * @return Response
+     * @param $provider
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function handleProviderCallback()
+    public function handleProviderCallback($provider)
     {
-        $socialUser = Socialite::driver('google')->user();
-
-        //Check is this email present
-        $userCheck = User::where('email', '=', $socialUser->email)->first();
-
-        if($userCheck)
-        {
-            $user = $userCheck;
-        }
-        else
-        {
-            $user = User::firstOrCreate([
-                'name'  => $socialUser->name,
-                'email' => $socialUser->email
-            ]);
+        if( ! in_array($provider, config('auth.social_providers'))) {
+            abort(403);
         }
 
-        Auth::login($user, true);
-        return redirect()->intended('home');
+        try {
+            $socialUser = Socialite::driver($provider)->user();
+        } catch(\Exception $e) {
+            return redirect('/');
+        }
+
+        $user = $this->findOrCreateSocialUser($socialUser, $provider);
+        auth()->login($user);
+
+        return redirect()->intended($this->redirectPath());
+    }
+
+    /**
+     * Find or Create a new user
+     *
+     * @param $socialUser
+     * @param $provider
+     * @return mixed
+     */
+    protected function findOrCreateSocialUser($socialUser, $provider)
+    {
+        $userData = [
+            'name' => $socialUser->name,
+            'email' => $socialUser->email,
+            'provider' => $provider,
+            'provider_id' => $socialUser->id,
+            'photo_url' => $socialUser->avatar,
+            'confirmed' => true,
+        ];
+
+        //check if user already registered via provider
+        $user = User::firstOrNew(['provider_id' => $userData['provider_id']]);
+
+        if($user->exists) return $user;
+
+        //if not check if there's already a user with this email address
+        $user = User::firstOrNew(['email' => $userData['email']]);
+
+        if($user->exists) {
+            $user->forceFill($userData)->save();
+            return $user;
+        }
+
+        //create a new user
+        $user->forceFill($userData)->save();
+
+        return $user;
     }
 
 }

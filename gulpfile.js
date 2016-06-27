@@ -13,28 +13,26 @@ var elixir = require('laravel-elixir');
 
 elixir(function(mix) {
     mix.sass([
-        'app.scss'
-    ], 'resources/assets/css/app.css')
+            'app.scss'
+        ], 'resources/assets/css/app.css')
 
         .styles([
-            'lib/bootstrap.min.css',
-            'lib/font-awesome.min.css',
-            'lib/parsley.css',
-            'lib/sweetalert.css',
-            'app.css',
-        ],'public/css/all.css')
+            'resources/assets/css/lib/sweetalert.css',
+            'resources/assets/css/app.css',
+        ],'public/css/all.css','./')
 
         .scripts([
-            'lib/jquery.min.js',
-            'lib/bootstrap.min.js',
-            'lib/parsley.min.js',
-            'lib/sweetalert-dev.js',
-            'pubsub.js',
-            'ajax-helpers.js',
-            'app.js',
-        ],'public/js/all.js')
+            'resources/assets/js/lib/jquery.min.js',
+            'node_modules/bootstrap-sass/assets/javascripts/bootstrap.min.js',
+            'node_modules/parsleyjs/dist/parsley.min.js',
+            'resources/assets/js/lib/sweetalert-dev.js',
+            'resources/assets/js/pubsub.js',
+            'resources/assets/js/ajax-helpers.js',
+            'resources/assets/js/app.js',
+        ],'public/js/all.js','./')
 
         .version(['css/all.css', 'js/all.js'])
 
-        .copy('resources/assets/other/font-awesome/fonts', 'public/build/fonts');
+        .copy('node_modules/font-awesome/fonts', 'public/build/fonts');
+
 });

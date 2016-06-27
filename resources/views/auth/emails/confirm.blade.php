@@ -1,5 +1,5 @@
 <p>
-Thank you for signing up {{ $user->first_name }}. Please <a href="{{ url("register/confirm/{$user->token}") }}">confirm your email address</a>.
+Thank you for signing up {{ $user->name }}. Please <a href="{{ url("register/confirm/{$user->token}") }}">confirm your email address</a>.
 </p>
 
 <p>

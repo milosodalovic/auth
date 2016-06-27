@@ -1,3 +1,4 @@
+
 <?php
 
 /*
@@ -30,9 +31,9 @@ Route::group(['middleware' => 'web'], function () {
     // Additional Confirm Registration page route
     Route::get('/register/confirm/{token}', 'Auth\AuthController@confirmRegistration');
 
-    // oAuth routes
-    Route::get('google', 'Auth\AuthController@redirectToProvider');
-    Route::get('google/callback', 'Auth\AuthController@handleProviderCallback');
+    //Social Authentication Routes
+    Route::get('auth/{provider}', 'Auth\AuthController@redirectToProvider');
+    Route::get('auth/{provider}/callback', 'Auth\AuthController@handleProviderCallback');
 
     // Pages
     Route::get('/', function () {

@@ -1,9 +1,13 @@
-// @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
+ @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
+ @import "node_modules/font-awesome/scss/font-awesome";
+ @import "node_modules/parsleyjs/scss/font-awesome";
+ @import "resources/assets/sass/utility/spaces";
 
-body {
-  font-family: 'Lato';
-}
+ body {
+   font-family: 'Lato';
+ }
 
+ //flash side massage
 .flash {
   background: #F6624A;
   border-radius: 4px;
@@ -15,3 +19,100 @@ body {
   padding: 1em;
   display: none;
 }
+
+// --or-- separator classes
+.or {
+  margin: 25px 15px 5px 15px;
+  border-top: 1px solid #ebedf0;
+  display: block;
+}
+
+.or-text {
+  margin: -15px auto 0;
+  background: #fff;
+  padding: 3px 9px;
+  width: 30px;
+  display: block;
+  color: #4F5154;
+}
+
+// custom buttons
+.btn-facebook {
+  background-color: #627AAD;
+  color: #fff;
+}
+
+.btn-facebook:hover {
+  background-color: #496092;
+  color: #fff;
+}
+
+ .btn-facebook:active {
+   background-color: #3b4c77;
+   color: #fff;
+ }
+
+ .btn-facebook:focus {
+   background-color: #496092;
+   color: #fff;
+ }
+
+.btn-twitter {
+  background-color: #55acee;
+  color: #fff;
+}
+
+.btn-twitter:hover {
+  background-color: #3e7dae;
+  color: #fff;
+}
+
+ .btn-twitter:active {
+   background-color: #376e99;
+   color: #fff;
+ }
+
+ .btn-twitter:focus {
+   background-color: #3e7dae;
+   color: #fff;
+ }
+
+.btn-linkedin {
+  background-color: #0077b5;
+  color: #fff;
+}
+
+.btn-linkedin:hover {
+  background-color: #006193;
+  color: #fff;
+}
+
+ .btn-linkedin:active {
+   background-color: #005580;
+   color: #fff;
+ }
+
+ .btn-linkedin:focus {
+   background-color: #006193;
+   color: #fff;
+ }
+
+.btn-google {
+  background-color: #c53929;
+  color: #fff;
+}
+
+.btn-google:hover {
+  background-color: #972c20;
+  color: #fff;
+}
+
+ .btn-google:active {
+   background-color: #7f251b;
+   color: #fff;
+ }
+
+ .btn-google:focus {
+   background-color: #972c20;
+   color: #fff;
+ }

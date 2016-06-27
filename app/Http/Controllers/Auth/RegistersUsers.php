@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Mail;
 
 trait RegistersUsers
 {
-    use RedirectsUsers;
+    use RedirectsUsers, ChecksCaptcha;
 
     /**
      * Show the application registration form.
@@ -62,6 +62,11 @@ trait RegistersUsers
             $this->throwValidationException(
                 $request, $validator
             );
+        }
+
+        //check captcha
+        if( ! $this->checkCaptcha()) {
+            return redirect()->back()->withErrors(['g-recaptcha-response' => 'Wrong Captcha']);
         }
 
         $user = $this->create($request->all());
@@ -117,7 +122,7 @@ trait RegistersUsers
     {
         Mail::queue(['html' => 'auth.emails.confirm'], compact('user'), function($message) use ($user) {
             $message->to($user->email);
-            $message->from(env('MAIL_FROM',null),env('MAIL_NAME',null));
+            $message->from(config('mail.from.address'),config('mail.from.name'));
             $message->subject('Account Confirmation');
         });
     }

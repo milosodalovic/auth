@@ -12,6 +12,8 @@
 
     <!-- Styles -->
     <link rel="stylesheet" href="{{ elixir("css/all.css") }}">
+    <script src='https://www.google.com/recaptcha/api.js'></script>
+
 </head>
 
 <body id="app-layout">

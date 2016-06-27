@@ -16,8 +16,7 @@ class AuthTest extends TestCase
     public function a_user_may_register_for_an_account_but_must_confirm_their_email_address()
     {
         $this->visit('register')
-             ->type('John','first_name')
-             ->type('Doe','last_name')
+             ->type('John Doe','name')
              ->type('john.doe@example.com','email')
              ->type('password','password')
              ->type('password','password_confirmation')

@@ -3,87 +3,80 @@
 @section('content')
 <div class="container">
     <div class="row">
-        <div class="col-md-8 col-md-offset-2">
+        <div class="col-md-4 col-md-offset-4">
             <div class="panel panel-default">
-                <div class="panel-heading">Register</div>
                 <div class="panel-body">
+
+                    <div class="row text-center margin-botoom-20">
+                        <h3>Register for App</h3>
+                    </div>
+
+                    <!-- Social Authentication -->
+                    @if(count(config('auth.social_providers')))
+                        <div class="row">
+                            @foreach(config('auth.social_providers') as $provider)
+                                <div class="col-md-10 col-md-offset-1 margin-top-10">
+                                    <a class="btn btn-block btn-{{ $provider }}" href="/auth/{{ $provider }}">
+                                        <i class="fa fa-lg fa-btn fa-{{ $provider }}" aria-hidden="true"></i> | Register with {{ $provider }}
+                                    </a>
+                                </div>
+                            @endforeach
+                        </div>
+
+                        <span class="or"><span class="or-text">or</span></span>
+
+                        <div class="row text-center m-b-md">
+                            <h5>Register with Email and Password</h5>
+                        </div>
+                    @endif
+
                     <form class="form-horizontal" role="form" method="POST" action="{{ url('/register') }}" data-parsley-validate>
                         {!! csrf_field() !!}
 
-                        <div class="form-group{{ $errors->has('first_name') ? ' has-error' : '' }}">
-                            <label class="col-md-4 control-label">First Name</label>
-
-                            <div class="col-md-6">
-                                <input type="text" class="form-control" name="first_name" value="{{ old('first_name') }}" data-parsley-required data-parsley-maxlength="255" data-parsley-type="alphanum">
-
-                                @if ($errors->has('first_name'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('first_name') }}</strong>
-                                    </span>
-                                @endif
+                        <!-- Name -->
+                        <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
+                            <div class="col-md-10 col-md-offset-1">
+                                <input type="text" placeholder="Name" class="form-control" name="name" value="{{ old('name') }}" data-parsley-required data-parsley-maxlength="255">
+                                @include('errors.field', ['fieldName' => 'name'])
                             </div>
                         </div>
 
-                        <div class="form-group{{ $errors->has('last_name') ? ' has-error' : '' }}">
-                            <label class="col-md-4 control-label">Last Name</label>
-
-                            <div class="col-md-6">
-                                <input type="text" class="form-control" name="last_name" value="{{ old('last_name') }}" data-parsley-required data-parsley-maxlength="255" data-parsley-type="alphanum">
-
-                                @if ($errors->has('last_name'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('last_name') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
+                        <!-- Email Address -->
                         <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                            <label class="col-md-4 control-label">E-Mail Address</label>
-
-                            <div class="col-md-6">
-                                <input type="email" class="form-control" name="email" value="{{ old('email') }}" data-parsley-required data-parsley-maxlength="255" data-parsley-type="email">
-
-                                @if ($errors->has('email'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('email') }}</strong>
-                                    </span>
-                                @endif
+                            <div class="col-md-10 col-md-offset-1">
+                                <input type="email" placeholder="E-Mail Address" class="form-control" name="email" value="{{ old('email') }}" data-parsley-required data-parsley-maxlength="255" data-parsley-type="email">
+                                @include('errors.field', ['fieldName' => 'email'])
                             </div>
                         </div>
 
+                        <!-- Password -->
                         <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
-                            <label class="col-md-4 control-label">Password</label>
-
-                            <div class="col-md-6">
-                                <input type="password" class="form-control" name="password" data-parsley-required data-parsley-maxlength="255">
-
-                                @if ($errors->has('password'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('password') }}</strong>
-                                    </span>
-                                @endif
+                            <div class="col-md-10 col-md-offset-1">
+                                <input type="password" placeholder="Password" class="form-control" name="password" data-parsley-required data-parsley-maxlength="255">
+                                @include('errors.field', ['fieldName' => 'password'])
                             </div>
                         </div>
 
+                        <!-- Confirm Password -->
                         <div class="form-group{{ $errors->has('password_confirmation') ? ' has-error' : '' }}">
-                            <label class="col-md-4 control-label">Confirm Password</label>
+                            <div class="col-md-10 col-md-offset-1">
+                                <input type="password" placeholder="Confirm Password" class="form-control" name="password_confirmation" data-parsley-required data-parsley-maxlength="255" data-parsley-equalto="input[name=password]">
+                                @include('errors.field', ['fieldName' => 'password_confirmation'])
+                            </div>
+                        </div>
 
-                            <div class="col-md-6">
-                                <input type="password" class="form-control" name="password_confirmation" data-parsley-required data-parsley-maxlength="255" data-parsley-equalto="input[name=password]">
-
-                                @if ($errors->has('password_confirmation'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('password_confirmation') }}</strong>
-                                    </span>
-                                @endif
+                        <!-- Google reCaptcha -->
+                        <div class="form-group{{ $errors->has('g-recaptcha-response') ? ' has-error' : '' }}">
+                            <div class="col-md-10 col-md-offset-1">
+                                <div class="g-recaptcha" data-sitekey="{{ config('services.recaptcha.site') }}" style="transform:scale(0.89); transform-origin:0 0" ></div>
+                                @include('errors.field', ['fieldName' => 'g-recaptcha-response'])
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <div class="col-md-6 col-md-offset-4">
-                                <button type="submit" class="btn btn-primary">
-                                    <i class="fa fa-btn fa-user"></i>Register
+                            <div class="col-md-10 col-md-offset-1">
+                                <button type="submit" class="btn btn-success btn-block">
+                                    <i class="fa fa-btn fa-user"></i> Register
                                 </button>
                             </div>
                         </div>
@@ -97,45 +90,38 @@
 
 @section('scripts')
     <script type="text/javascript">
-        var first_name = $('input[name=first_name]').parsley();
-        var last_name = $('input[name=last_name]').parsley();
-        var email = $('input[name=email]').parsley();
-        var password = $('input[name=password]').parsley();
-        var password_confirmation = $('input[name=password_confirmation]').parsley();
+        var nameField = $('input[name=name]').parsley();
+        var emailField = $('input[name=email]').parsley();
+        var passwordField = $('input[name=password]').parsley();
+        var passwordConfirmationField = $('input[name=password_confirmation]').parsley();
 
-        $('input[name=first_name]').on('blur', function() {
-            if( ! first_name.isValid()){
-                first_name.validate();
-            }
-        });
-
-        $('input[name=last_name]').on('blur', function() {
-            if( ! last_name.isValid()){
-                last_name.validate();
+        $('input[name=name]').on('blur', function() {
+            if( ! nameField.isValid()){
+                nameField.validate();
             }
         });
 
         $('input[name=email]').on('blur', function() {
-            if( ! email.isValid()){
-                email.validate();
+            if( ! emailField.isValid()){
+                emailField.validate();
             }
         });
 
         $('input[name=password]').on('blur', function() {
-            if( ! password.isValid()){
-                password.validate();
+            if( ! passwordField.isValid()){
+                passwordField.validate();
             }
         });
 
         $('input[name=password_confirmation]').on('blur', function() {
-            if( ! password_confirmation.isValid()){
-                password_confirmation.validate();
+            if( ! passwordConfirmationField.isValid()){
+                passwordConfirmationField.validate();
             }
         });
 
         $('form').submit(function(){
-            if(first_name.isValid() && last_name.isValid() && email.isValid()
-                    && password.isValid() && password_confirmation.isValid()) {
+            if(nameField.isValid() && emailField.isValid()
+                    && passwordField.isValid() && passwordConfirmationField.isValid()) {
 
                 $(this).find(':submit').attr('disabled','disabled');
             }
