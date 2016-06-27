@@ -1,6 +1,5 @@
  @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
  @import "node_modules/font-awesome/scss/font-awesome";
- @import "node_modules/parsleyjs/scss/font-awesome";
  @import "resources/assets/sass/utility/spaces";
 
  body {
@@ -115,4 +114,29 @@
  .btn-google:focus {
    background-color: #972c20;
    color: #fff;
+ }
+
+ //navigation bar
+ .nav-profile-photo {
+   border: 2px solid #d3e0e9;
+   border-radius: 50%;
+   height: 40px;
+   padding: 2px;
+   width: 40px;
+   height: 50px;
+   width: 50px;
+ }
+
+ .navbar-nav > li > a, .navbar-brand, .hamburger {
+   height: 70px;
+   padding-top: 0px;
+   padding-bottom: 0px;
+   display: flex;
+   flex-direction: row;
+   justify-content: center;
+   align-items: center;
+ }
+
+ .hamburger {
+   float: right;
  }
