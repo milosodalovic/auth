@@ -25,7 +25,7 @@
 
                         <span class="or"><span class="or-text">or</span></span>
 
-                        <div class="row text-center m-b-md">
+                        <div class="row text-center margin-bottom-10">
                             <h5>Login with Email and Password</h5>
                         </div>
                     @endif
