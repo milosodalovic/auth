@@ -38,7 +38,7 @@
                                 <!-- Email Address -->
                                 <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}" :class="{ 'has-error':$validator.email.required && ! formValid }">
                                     <div class="col-md-10 col-md-offset-1">
-                                        <input type="email" placeholder="E-Mail Address" class="form-control" name="email" value="{{ old('email') }}" v-model="email" v-validate:email="['required']">
+                                        <input type="email" placeholder="E-Mail Address" class="form-control" name="email" value="{{ old('email') }}" v-validate:email="['required']">
                                         @include('errors.field', ['fieldName' => 'email'])
                                         <strong class="help-block" v-show="$validator.email.required && ! formValid">The email field is required!</strong>
                                     </div>
@@ -47,7 +47,7 @@
                                 <!-- Password -->
                                 <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}" :class="{ 'has-error': $validator.password.required && ! formValid }">
                                     <div class="col-md-10 col-md-offset-1">
-                                        <input type="password" placeholder="Password" class="form-control" name="password" v-model="password" v-validate:password="['required']">
+                                        <input type="password" placeholder="Password" class="form-control" name="password" v-validate:password="['required']">
                                         @include('errors.field', ['fieldName' => 'password'])
                                         <strong class="help-block" v-show="$validator.password.required && ! formValid">The password field is required!</strong>
                                     </div>
@@ -89,28 +89,3 @@
 </div>
 
 @endsection
-
-{{--@section('scripts')--}}
-    {{--<script type="text/javascript">--}}
-        {{--var emailField = $('input[name=email]').parsley();--}}
-        {{--var passwordField = $('input[name=password]').parsley();--}}
-
-        {{--$('input[name=email]').on('blur', function() {--}}
-            {{--if( ! emailField.isValid()){--}}
-                {{--emailField.validate();--}}
-            {{--}--}}
-        {{--});--}}
-
-        {{--$('input[name=password]').on('blur', function() {--}}
-            {{--if( ! passwordField.isValid()){--}}
-                {{--passwordField.validate();--}}
-            {{--}--}}
-        {{--});--}}
-
-        {{--$('form').submit(function(){--}}
-            {{--if(emailField.isValid() && passwordField.isValid()){--}}
-                {{--$(this).find(':submit').attr('disabled','disabled');--}}
-            {{--}--}}
-        {{--});--}}
-    {{--</script>--}}
-{{--@stop--}}

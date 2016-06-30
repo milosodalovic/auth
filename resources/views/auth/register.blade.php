@@ -36,42 +36,38 @@
                                     {!! csrf_field() !!}
 
                                     <!-- Name -->
-                                    <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}" :class="{ 'has-error': $validator.name.required && ! formValid }">
+                                    <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}" :class="{ 'has-error':$validator.name.required && ! formValid }">
                                         <div class="col-md-10 col-md-offset-1">
                                             <input type="text" placeholder="Name" class="form-control" name="name" value="{{ old('name') }}" v-validate:name="['required']">
-
                                             @include('errors.field', ['fieldName' => 'name'])
                                             <strong class="help-block" v-show="$validator.name.required && ! formValid">The name field is required!</strong>
                                         </div>
                                     </div>
 
                                     <!-- Email Address -->
-                                    <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}" :class="{ 'has-error': $validator.email.required && ! formValid }">
+                                    <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}" :class="{ 'has-error':$validator.email.required && ! formValid }">
                                         <div class="col-md-10 col-md-offset-1">
                                             <input type="email" placeholder="E-Mail Address" class="form-control" name="email" value="{{ old('email') }}" v-validate:email="['required']">
-
                                             @include('errors.field', ['fieldName' => 'email'])
-                                            <strong class="help-block" v-show="$validator.email.required && ! formValid">The email is required!</strong>
+                                            <strong class="help-block" v-show="$validator.email.required && ! formValid">The email field is required!</strong>
                                         </div>
                                     </div>
 
                                     <!-- Password -->
-                                    <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}" :class="{ 'has-error': $validator.password.required && ! formValid }">
+                                    <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}" :class="{ 'has-error':$validator.password.required && ! formValid }">
                                         <div class="col-md-10 col-md-offset-1">
                                             <input type="password" placeholder="Password" class="form-control" name="password" v-validate:password="['required']">
-
                                             @include('errors.field', ['fieldName' => 'password'])
                                             <strong class="help-block" v-show="$validator.password.required && ! formValid">The password field is required!</strong>
                                         </div>
                                     </div>
 
                                     <!-- Confirm Password -->
-                                    <div class="form-group{{ $errors->has('password_confirmation') ? ' has-error' : '' }}" :class="{ 'has-error': $validator.password_confirmation.required && ! formValid }">
+                                    <div class="form-group{{ $errors->has('password_confirmation') ? ' has-error' : '' }}" :class="{ 'has-error':$validator.password_confirmation.required && ! formValid }">
                                         <div class="col-md-10 col-md-offset-1">
                                             <input type="password" placeholder="Confirm Password" class="form-control" name="password_confirmation" v-validate:password_confirmation="['required']">
-
                                             @include('errors.field', ['fieldName' => 'password_confirmation'])
-                                            <strong class="help-block" v-show="$validator.password_confirmation.required && ! formValid">The confirm password field is required!</strong>
+                                            <strong class="help-block" v-show="$validator.password_confirmation.required && ! formValid">The password confirmation field is required!</strong>
                                         </div>
                                     </div>
 
@@ -85,24 +81,25 @@
 
                                     <div class="form-group">
                                         <div class="col-md-10 col-md-offset-1">
-                                            <button class="btn btn-success btn-block" :disabled="formBusy">
+                                            <button class="btn btn-block btn-success" :disabled="formBusy">
                                                 <span v-if="formBusy">
-                                                    <i class="fa fa-spinner fa-spin"></i> Registering
+                                                    <i class="fa fa-btn fa-spinner fa-spin"></i> Registering
                                                 </span>
 
                                                 <span v-else>
-                                                    <i class="fa fa-check-circle"></i> Register
+                                                    <i class="fa fa-btn fa-check-circle"></i> Register
                                                 </span>
                                             </button>
                                         </div>
                                     </div>
+
                                 </form>
                             </validator>
                         </register>
-
                     </div>
                 </div>
             </div>
         </div>
     </div>
 @endsection
+

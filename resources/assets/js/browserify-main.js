@@ -14089,8 +14089,6 @@ Vue.component('login', {
 
     data: function data() {
         return {
-            email: '',
-            password: '',
             formValid: true,
             formBusy: false
         };
@@ -14098,7 +14096,7 @@ Vue.component('login', {
 
     methods: {
         onSubmit: function onSubmit(e) {
-            this.formValid = this.email != '' && this.password != '';
+            this.formValid = this.$validator.valid;
 
             if (this.formValid) {
                 this.formBusy = true;
