@@ -16,7 +16,7 @@
 
 </head>
 
-<body id="app-layout">
+<body id="app">
 
     <!-- Navigation -->
     @include('layouts.partials.nav')

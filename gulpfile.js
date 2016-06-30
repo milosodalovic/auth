@@ -1,5 +1,7 @@
 var elixir = require('laravel-elixir');
 
+require('laravel-elixir-vueify');
+
 /*
  |--------------------------------------------------------------------------
  | Elixir Asset Management
@@ -21,13 +23,13 @@ elixir(function(mix) {
             'resources/assets/css/app.css',
         ],'public/css/all.css','./')
 
+        .browserify('main.js','resources/assets/js/browserify-main.js')
+
         .scripts([
+            'resources/assets/js/browserify-main.js',
             'resources/assets/js/lib/jquery.min.js',
             'node_modules/bootstrap-sass/assets/javascripts/bootstrap.min.js',
-            'node_modules/parsleyjs/dist/parsley.min.js',
             'resources/assets/js/lib/sweetalert-dev.js',
-            'resources/assets/js/pubsub.js',
-            'resources/assets/js/ajax-helpers.js',
             'resources/assets/js/app.js',
         ],'public/js/all.js','./')
 
