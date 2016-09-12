@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Notifications\ConfirmAccount;
 use App\User;
 use Illuminate\Foundation\Auth\RedirectsUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Mail;
 
 trait RegistersUsers
 {
@@ -18,34 +17,9 @@ trait RegistersUsers
      *
      * @return \Illuminate\Http\Response
      */
-    public function getRegister()
-    {
-        return $this->showRegistrationForm();
-    }
-
-    /**
-     * Show the application registration form.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function showRegistrationForm()
     {
-        if (property_exists($this, 'registerView')) {
-            return view($this->registerView);
-        }
-
         return view('auth.register');
-    }
-
-    /**
-     * Handle a registration request for the application.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function postRegister(Request $request)
-    {
-        return $this->register($request);
     }
 
     /**
@@ -56,13 +30,7 @@ trait RegistersUsers
      */
     public function register(Request $request)
     {
-        $validator = $this->validator($request->all());
-
-        if ($validator->fails()) {
-            $this->throwValidationException(
-                $request, $validator
-            );
-        }
+        $this->validator($request->all())->validate();
 
         //check captcha
         if( ! $this->checkCaptcha()) {
@@ -75,13 +43,13 @@ trait RegistersUsers
             $user->token = str_random(30);
             $user->save();
 
-            $this->sendConfirmationEmail($user);
+            $user->notify(new ConfirmAccount($user));
             return view('auth.confirm', compact('user'));
         }
 
         $user->confirmed = true;
         $user->save();
-        Auth::guard($this->getGuard())->login($user);
+        $this->guard()->login($user);
 
         return redirect($this->redirectPath());
     }
@@ -98,13 +66,12 @@ trait RegistersUsers
     {
         $unconfirmedUsers = User::notConfirmed()->get();
 
-        foreach($unconfirmedUsers as $user){
-            if($user->token == $token)
-            {
+        foreach($unconfirmedUsers as $user) {
+            if($user->token == $token) {
                 $user->confirmed = true;
                 $user->token = null;
                 $user->save();
-                Auth::guard($this->getGuard())->login($user);
+                $this->guard()->login($user);
 
                 return redirect($this->redirectPath());
             }
@@ -114,26 +81,12 @@ trait RegistersUsers
     }
 
     /**
-     * Send email confirmation email to the User
-     *
-     * @param $user
-     */
-    public function sendConfirmationEmail($user)
-    {
-        Mail::queue(['html' => 'auth.emails.confirm'], compact('user'), function($message) use ($user) {
-            $message->to($user->email);
-            $message->from(config('mail.from.address'),config('mail.from.name'));
-            $message->subject('Account Confirmation');
-        });
-    }
-
-    /**
      * Get the guard to be used during registration.
      *
-     * @return string|null
+     * @return \Illuminate\Contracts\Auth\StatefulGuard
      */
-    protected function getGuard()
+    protected function guard()
     {
-        return property_exists($this, 'guard') ? $this->guard : null;
+        return Auth::guard();
     }
 }

@@ -1,0 +1,89 @@
+.custom-radio, .custom-checkbox {
+  margin-top: 0;
+}
+
+/**/
+/* radios and checkboxes */
+/**/
+.custom-radio,
+.custom-checkbox {
+  margin-top: 0;
+  margin-bottom: 4px;
+  padding-left: 27px;
+  line-height: 27px;
+  cursor: pointer;
+  position: relative;
+  font-weight: normal;
+}
+.custom-radio:last-child,
+.custom-checkbox:last-child {
+  margin-bottom: 0;
+}
+.custom-radio input,
+.custom-checkbox input {
+  position: absolute;
+  left: -9999px;
+}
+.custom-radio i,
+.custom-checkbox i {
+  position: absolute;
+  top: 5px;
+  left: 0;
+  display: block;
+  width: 17px;
+  height: 17px;
+  outline: none;
+  border: 1px solid #999;
+  background: #fff;
+}
+.custom-radio i {
+  border-radius: 50%;
+}
+.custom-radio input + i:after,
+.custom-checkbox input + i:after {
+  position: absolute;
+  opacity: 0;
+  -ms-transition: opacity 0.1s;
+  -moz-transition: opacity 0.1s;
+  -webkit-transition: opacity 0.1s;
+}
+.custom-radio input + i:after {
+  content: '';
+  top: 5px;
+  left: 5px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: #4e4e4e;
+}
+.custom-checkbox input + i:after {
+  content: '\f00c';
+  color: #4e4e4e;
+  top: 2px;
+  left: 0;
+  width: 15px;
+  height: 15px;
+  font: normal 10px FontAwesome;
+  text-align: center;
+}
+.custom-radio input:checked + i:after,
+.custom-checkbox input:checked + i:after {
+  opacity: 1;
+}
+.custom-inline-group {
+  margin: 0 -30px -4px 0;
+}
+.custom-inline-group:after {
+  content: '';
+  display: table;
+  clear: both;
+}
+.custom-inline-group .radio,
+.custom-inline-group .checkbox {
+  float: left;
+  margin-right: 30px;
+}
+.custom-inline-group .radio:last-child,
+.custom-inline-group .checkbox:last-child {
+  margin-bottom: 4px;
+}

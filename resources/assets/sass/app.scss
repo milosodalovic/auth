@@ -1,12 +1,35 @@
- @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
- @import "node_modules/font-awesome/scss/font-awesome";
- @import "resources/assets/sass/utility/spaces";
+// Fonts
+@import url(https://fonts.googleapis.com/css?family=Raleway:300,400,600);
 
- body {
-   font-family: 'Lato';
- }
+// Icons
+@import "node_modules/font-awesome/scss/font-awesome";
 
- //flash side massage
+// Variables
+@import "variables";
+
+// Bootstrap
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
+
+// Other
+@import "resources/assets/sass/utility/spaces";
+@import "resources/assets/sass/utility/buttons";
+@import "resources/assets/sass/utility/tables";
+@import "resources/assets/sass/utility/radios-checkboxes";
+
+html {
+  min-height: 100%;
+}
+
+body {
+  min-height: 100%;
+}
+
+// VueJS 'hide until compiled' directive
+[v-cloak] {
+  display: none;
+}
+
+//flash side massage
 .flash {
   background: #F6624A;
   border-radius: 4px;
@@ -35,108 +58,29 @@
   color: #4F5154;
 }
 
-// custom buttons
-.btn-facebook {
-  background-color: #627AAD;
-  color: #fff;
+//navigation bar
+.nav-profile-photo {
+  border: 2px solid #d3e0e9;
+  border-radius: 50%;
+  height: 40px;
+  padding: 2px;
+  width: 40px;
+  height: 50px;
+  width: 50px;
 }
 
-.btn-facebook:hover {
-  background-color: #496092;
-  color: #fff;
+.navbar-nav > li > a,
+.navbar-brand,
+.hamburger {
+  height: 70px;
+  padding-top: 0px;
+  padding-bottom: 0px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
 }
 
- .btn-facebook:active {
-   background-color: #3b4c77;
-   color: #fff;
- }
-
- .btn-facebook:focus {
-   background-color: #496092;
-   color: #fff;
- }
-
-.btn-twitter {
-  background-color: #55acee;
-  color: #fff;
+.hamburger {
+  float: right;
 }
-
-.btn-twitter:hover {
-  background-color: #3e7dae;
-  color: #fff;
-}
-
- .btn-twitter:active {
-   background-color: #376e99;
-   color: #fff;
- }
-
- .btn-twitter:focus {
-   background-color: #3e7dae;
-   color: #fff;
- }
-
-.btn-linkedin {
-  background-color: #0077b5;
-  color: #fff;
-}
-
-.btn-linkedin:hover {
-  background-color: #006193;
-  color: #fff;
-}
-
- .btn-linkedin:active {
-   background-color: #005580;
-   color: #fff;
- }
-
- .btn-linkedin:focus {
-   background-color: #006193;
-   color: #fff;
- }
-
-.btn-google {
-  background-color: #c53929;
-  color: #fff;
-}
-
-.btn-google:hover {
-  background-color: #972c20;
-  color: #fff;
-}
-
- .btn-google:active {
-   background-color: #7f251b;
-   color: #fff;
- }
-
- .btn-google:focus {
-   background-color: #972c20;
-   color: #fff;
- }
-
- //navigation bar
- .nav-profile-photo {
-   border: 2px solid #d3e0e9;
-   border-radius: 50%;
-   height: 40px;
-   padding: 2px;
-   width: 40px;
-   height: 50px;
-   width: 50px;
- }
-
- .navbar-nav > li > a, .navbar-brand, .hamburger {
-   height: 70px;
-   padding-top: 0px;
-   padding-bottom: 0px;
-   display: flex;
-   flex-direction: row;
-   justify-content: center;
-   align-items: center;
- }
-
- .hamburger {
-   float: right;
- }

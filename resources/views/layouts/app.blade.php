@@ -5,15 +5,24 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Laravel</title>
-
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css?family=Lato:100,300,400,700" rel='stylesheet' type='text/css'>
+    <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Styles -->
     <link rel="stylesheet" href="{{ elixir("css/all.css") }}">
-    <script src='https://www.google.com/recaptcha/api.js'></script>
 
+    <!-- Additional Styles -->
+    @yield('styles')
+
+    @if(config('auth.options.captcha'))
+        <script src='https://www.google.com/recaptcha/api.js'></script>
+    @endif
+
+    <!-- Scripts -->
+    <script>
+        window.Laravel = <?php echo json_encode([
+            'csrfToken' => csrf_token(),
+        ]); ?>
+    </script>
 </head>
 
 <body id="app">

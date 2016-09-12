@@ -2,53 +2,25 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\User;
+use App\Notifications\ConfirmAccount;
 use Illuminate\Foundation\Auth\RedirectsUsers;
+use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Lang;
 
 trait AuthenticatesUsers
 {
-    use RedirectsUsers;
+    use RedirectsUsers, ThrottlesLogins;
 
     /**
-     * Show the application login form.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function getLogin()
-    {
-        return $this->showLoginForm();
-    }
-
-    /**
-     * Show the application login form.
+     * Show the application's login form.
      *
      * @return \Illuminate\Http\Response
      */
     public function showLoginForm()
     {
-        if (property_exists($this, 'loginView')) {
-            return view($this->loginView);
-        }
-
-        if (view()->exists('auth.authenticate')) {
-            return view('auth.authenticate');
-        }
-
         return view('auth.login');
-    }
-
-    /**
-     * Handle a login request to the application.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function postLogin(Request $request)
-    {
-        return $this->login($request);
     }
 
     /**
@@ -59,42 +31,39 @@ trait AuthenticatesUsers
      */
     public function login(Request $request)
     {
-        $this->validate($request, [
-            $this->loginUsername() => 'required', 'password' => 'required',
-        ]);
+        $this->validateLogin($request);
 
         // If the class is using the ThrottlesLogins trait, we can automatically throttle
         // the login attempts for this application. We'll key this by the username and
         // the IP address of the client making these requests into this application.
-        $throttles = $this->isUsingThrottlesLoginsTrait();
+        if ($lockedOut = $this->hasTooManyLoginAttempts($request)) {
+            $this->fireLockoutEvent($request);
 
-        if ($throttles && $this->hasTooManyLoginAttempts($request)) {
             return $this->sendLockoutResponse($request);
         }
 
-        $credentials = $this->getCredentials($request);
+        $credentials = $this->credentials($request);
 
         // Check if credentials are correct without logging in the user. If successful retrieve the
         // user from the database and then check if it has been confirmed. If confirmed log it in
         // otherwise resend the confirm registration mail and go to confirm page.
-        if (Auth::guard($this->getGuard())->attempt($credentials, $request->has('remember'), false)) {
+        if ($this->guard()->attempt($credentials, $request->has('remember'), false)) {
 
-            $user = Auth::guard($this->getGuard())->getLastAttempted();
+            $user = $this->guard()->getLastAttempted();
 
-            if($user->confirmed)
-            {
-                Auth::guard($this->getGuard())->login($user, $request->has('remember'));
-                return $this->handleUserWasAuthenticated($request, $throttles);
+            if($user->confirmed) {
+                $this->guard()->login($user, $request->has('remember'));
+                return $this->sendLoginResponse($request);
             }
 
-            $this->sendConfirmationEmail($user);
+            $user->notify(new ConfirmAccount($user));
             return view('auth.confirm', compact('user'));
         }
 
         // If the login attempt was unsuccessful we will increment the number of attempts
         // to login and redirect the user back to the login form. Of course, when this
         // user surpasses their maximum number of attempts they will get locked out.
-        if ($throttles) {
+        if (! $lockedOut) {
             $this->incrementLoginAttempts($request);
         }
 
@@ -102,23 +71,55 @@ trait AuthenticatesUsers
     }
 
     /**
+     * Validate the user login request.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return void
+     */
+    protected function validateLogin(Request $request)
+    {
+        $this->validate($request, [
+            $this->username() => 'required', 'password' => 'required',
+        ]);
+    }
+
+    /**
+     * Get the needed authorization credentials from the request.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return array
+     */
+    protected function credentials(Request $request)
+    {
+        return $request->only($this->username(), 'password');
+    }
+
+    /**
      * Send the response after the user was authenticated.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  bool  $throttles
      * @return \Illuminate\Http\Response
      */
-    protected function handleUserWasAuthenticated(Request $request, $throttles)
+    protected function sendLoginResponse(Request $request)
     {
-        if ($throttles) {
-            $this->clearLoginAttempts($request);
-        }
+        $request->session()->regenerate();
 
-        if (method_exists($this, 'authenticated')) {
-            return $this->authenticated($request, Auth::guard($this->getGuard())->user());
-        }
+        $this->clearLoginAttempts($request);
 
-        return redirect()->intended($this->redirectPath());
+        return $this->authenticated($request, $this->guard()->user())
+            ?: redirect()->intended($this->redirectPath());
+    }
+
+    /**
+     * The user has been authenticated.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  mixed  $user
+     * @return mixed
+     */
+    protected function authenticated(Request $request, $user)
+    {
+        //
     }
 
     /**
@@ -130,55 +131,10 @@ trait AuthenticatesUsers
     protected function sendFailedLoginResponse(Request $request)
     {
         return redirect()->back()
-            ->withInput($request->only($this->loginUsername(), 'remember'))
+            ->withInput($request->only($this->username(), 'remember'))
             ->withErrors([
-                $this->loginUsername() => $this->getFailedLoginMessage(),
+                $this->username() => Lang::get('auth.failed'),
             ]);
-    }
-
-    /**
-     * Get the failed login message.
-     *
-     * @return string
-     */
-    protected function getFailedLoginMessage()
-    {
-        return Lang::has('auth.failed')
-                ? Lang::get('auth.failed')
-                : 'These credentials do not match our records.';
-    }
-
-    /**
-     * Get the needed authorization credentials from the request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array
-     */
-    protected function getCredentials(Request $request)
-    {
-        return $request->only($this->loginUsername(), 'password');
-    }
-
-    /**
-     * Log the user out of the application.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function getLogout()
-    {
-        return $this->logout();
-    }
-
-    /**
-     * Log the user out of the application.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function logout()
-    {
-        Auth::guard($this->getGuard())->logout();
-
-        return redirect(property_exists($this, 'redirectAfterLogout') ? $this->redirectAfterLogout : '/');
     }
 
     /**
@@ -186,30 +142,35 @@ trait AuthenticatesUsers
      *
      * @return string
      */
-    public function loginUsername()
+    public function username()
     {
-        return property_exists($this, 'username') ? $this->username : 'email';
+        return 'email';
     }
 
     /**
-     * Determine if the class is using the ThrottlesLogins trait.
+     * Log the user out of the application.
      *
-     * @return bool
+     * @param  Request  $request
+     * @return \Illuminate\Http\Response
      */
-    protected function isUsingThrottlesLoginsTrait()
+    public function logout(Request $request)
     {
-        return in_array(
-            ThrottlesLogins::class, class_uses_recursive(get_class($this))
-        );
+        $this->guard()->logout();
+
+        $request->session()->flush();
+
+        $request->session()->regenerate();
+
+        return redirect('/');
     }
 
     /**
      * Get the guard to be used during authentication.
      *
-     * @return string|null
+     * @return \Illuminate\Contracts\Auth\StatefulGuard
      */
-    protected function getGuard()
+    protected function guard()
     {
-        return property_exists($this, 'guard') ? $this->guard : null;
+        return Auth::guard();
     }
 }

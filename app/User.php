@@ -2,21 +2,24 @@
 
 namespace App;
 
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
+    use Notifiable;
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password'
+        'name', 'email', 'password',
     ];
 
     /**
-     * The attributes excluded from the model's JSON form.
+     * The attributes that should be hidden for arrays.
      *
      * @var array
      */
@@ -25,6 +28,8 @@ class User extends Authenticatable
     ];
 
     /**
+     * Get All unconfirmed users
+     *
      * @param $query
      * @return mixed
      */
@@ -32,5 +37,4 @@ class User extends Authenticatable
     {
         return $query->where('confirmed',0);
     }
-
 }

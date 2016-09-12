@@ -3,84 +3,39 @@
 namespace App\Http\Controllers\Auth;
 
 use App\User;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Foundation\Auth\RedirectsUsers;
 use Laravel\Socialite\Facades\Socialite;
 use Validator;
 use App\Http\Controllers\Controller;
-use Illuminate\Foundation\Auth\ThrottlesLogins;
 
-class AuthController extends Controller
+class SocialAuthController extends Controller
 {
     /*
     |--------------------------------------------------------------------------
-    | Registration & Login Controller
+    | SocialAuth Controller
     |--------------------------------------------------------------------------
     |
-    | This controller handles the registration of new users, as well as the
-    | authentication of existing users. By default, this controller uses
-    | a simple trait to add these behaviors. Why don't you explore it?
+    | This controller handles the social authentication and registration
     |
     */
 
-    use AuthenticatesAndRegistersUsers, ThrottlesLogins;
+    use RedirectsUsers;
 
     /**
-     * Where to redirect users after login / confirmed registration.
+     * Where to redirect users after login / registration.
      *
      * @var string
      */
-    protected $redirectTo = '/';
+    protected $redirectTo = '/home';
 
     /**
-     * Specify whether Email confirmation is required after registration
+     * Create a new controller instance.
      *
-     * @var boolean
-     */
-    protected $isUsingEmailConfirmation = true;
-
-    /**
-     * Create a new authentication controller instance.
-     *
-     * AuthController constructor.
+     * SocialAuthController constructor.
      */
     public function __construct()
     {
-        $this->middleware('guest', ['except' => 'logout']);
-    }
-
-    /**
-     * Get a validator for an incoming registration request.
-     *
-     * @param  array  $data
-     * @return \Illuminate\Contracts\Validation\Validator
-     */
-    protected function validator(array $data)
-    {
-        $messages = [
-            'g-recaptcha-response.required' => 'Captcha is required!',
-        ];
-
-        return Validator::make($data, [
-            'name' => 'required|max:255',
-            'email' => 'required|email|max:255|unique:users',
-            'password' => 'required|confirmed|min:6',
-            'g-recaptcha-response' => 'required',
-        ], $messages);
-    }
-
-    /**
-     * Create a new user instance after a valid registration.
-     *
-     * @param  array  $data
-     * @return User
-     */
-    protected function create(array $data)
-    {
-        return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => bcrypt($data['password']),
-        ]);
+        $this->middleware('guest');
     }
 
     /**
@@ -158,5 +113,4 @@ class AuthController extends Controller
 
         return $user;
     }
-
 }
