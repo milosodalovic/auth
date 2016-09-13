@@ -29,54 +29,50 @@
                         @endif
 
                         <login inline-template>
-                            <validator name="validator">
-                                <form class="form-horizontal" role="form" method="POST" action="{{ url('/login') }}" @submit.prevent="onSubmit" novalidate v-cloak>
-                                    {!! csrf_field() !!}
+                            <form class="form-horizontal" role="form" method="POST" action="{{ url('/login') }}" @submit.prevent="onSubmit" v-cloak data-parsley-validate>
+                                {!! csrf_field() !!}
 
-                                    <!-- Email Address -->
-                                    <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}" :class="{ 'has-error':$validator.email.required && ! formValid }">
-                                        <div class="col-sm-10 col-sm-offset-1">
-                                            <input type="email" placeholder="E-Mail Address" class="form-control" name="email" value="{{ old('email') }}" v-validate:email="['required']">
-                                            @include('errors.field', ['fieldName' => 'email'])
-                                            <strong class="help-block" v-show="$validator.email.required && ! formValid">The email field is required!</strong>
-                                        </div>
+                                <!-- Email Address -->
+                                <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
+                                    <div class="col-sm-10 col-sm-offset-1">
+                                        <input type="email" placeholder="E-Mail Address" class="form-control" name="email" value="{{ old('email') }}" data-parsley-required data-parsley-type="email">
+                                        @include('errors.field', ['fieldName' => 'email'])
                                     </div>
+                                </div>
 
-                                    <!-- Password -->
-                                    <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}" :class="{ 'has-error': $validator.password.required && ! formValid }">
-                                        <div class="col-sm-10 col-sm-offset-1">
-                                            <input type="password" placeholder="Password" class="form-control" name="password" v-validate:password="['required']">
-                                            @include('errors.field', ['fieldName' => 'password'])
-                                            <strong class="help-block" v-show="$validator.password.required && ! formValid">The password field is required!</strong>
-                                        </div>
+                                <!-- Password -->
+                                <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
+                                    <div class="col-sm-10 col-sm-offset-1">
+                                        <input type="password" placeholder="Password" class="form-control" name="password" data-parsley-required>
+                                        @include('errors.field', ['fieldName' => 'password'])
                                     </div>
+                                </div>
 
-                                    <!-- Remember Me -->
-                                    <div class="form-group">
-                                        <div class="col-sm-10 col-sm-offset-1">
-                                            <label class="custom-checkbox">
-                                                <input type="checkbox" name="remember"><i></i>Remember me
-                                            </label>
-                                        </div>
+                                <!-- Remember Me -->
+                                <div class="form-group">
+                                    <div class="col-sm-10 col-sm-offset-1">
+                                        <label class="custom-checkbox">
+                                            <input type="checkbox" name="remember"><i></i>Remember me
+                                        </label>
                                     </div>
+                                </div>
 
-                                    <div class="form-group">
-                                        <div class="col-sm-10 col-sm-offset-1">
-                                            <button type="submit" class="btn btn-success btn-block" :disabled="formBusy">
-                                                <i class="fa fa-btn fa-sign-in"></i> Login
-                                            </button>
-                                        </div>
+                                <div class="form-group">
+                                    <div class="col-sm-10 col-sm-offset-1">
+                                        <button type="submit" class="btn btn-success btn-block" :disabled="formBusy">
+                                            <i class="fa fa-btn fa-sign-in"></i>Login
+                                        </button>
                                     </div>
+                                </div>
 
-                                    <div class="form-group">
-                                        <div class="col-sm-10 col-sm-offset-1">
-                                            <a href="{{ url('/password/reset') }}">Forgot Your Password?</a>
-                                            <a class="pull-right" href="/register">New User?</a>
-                                        </div>
+                                <div class="form-group">
+                                    <div class="col-sm-10 col-sm-offset-1">
+                                        <a href="{{ url('/password/reset') }}">Forgot Your Password?</a>
+                                        <a class="pull-right" href="/register">New User?</a>
                                     </div>
+                                </div>
 
-                                </form>
-                            </validator>
+                            </form>
                         </login>
                     </div>
                 </div>

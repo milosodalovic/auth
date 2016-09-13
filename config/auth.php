@@ -115,4 +115,19 @@ return [
         'facebook',
         'twitter',
     ],
+
+    /*
+   |--------------------------------------------------------------------------
+   | Additional Authentication Options
+   |--------------------------------------------------------------------------
+   |
+   | Specify whether Email confirmation is required after registration.
+   | Specify whether Captcha is used in registration
+   |
+   */
+
+    'options' => [
+        'confirm_email' => false,
+        'captcha' => false,
+    ],
 ];

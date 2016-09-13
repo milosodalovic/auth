@@ -33,13 +33,15 @@ trait RegistersUsers
         $this->validator($request->all())->validate();
 
         //check captcha
-        if( ! $this->checkCaptcha()) {
-            return redirect()->back()->withErrors(['g-recaptcha-response' => 'Wrong Captcha']);
+        if(config('auth.options.captcha')) {
+            if( ! $this->checkCaptcha()) {
+                return redirect()->back()->withErrors(['g-recaptcha-response' => 'Wrong Captcha'])->withInput();
+            }
         }
 
         $user = $this->create($request->all());
 
-        if($this->isUsingEmailConfirmation){
+        if(config('auth.options.confirm_email')){
             $user->token = str_random(30);
             $user->save();
 

@@ -18,12 +18,12 @@
                         </div>
                     @endif
 
-                    <form class="form-horizontal" role="form" method="POST" action="{{ url('/password/email') }}">
+                    <form class="form-horizontal" role="form" method="POST" action="{{ url('/password/email') }}" data-parsley-validate>
                         {!! csrf_field() !!}
 
                         <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
                             <div class="col-sm-10 col-sm-offset-1">
-                                <input type="email" placeholder="E-Mail Address" class="form-control" name="email" value="{{ old('email') }}">
+                                <input type="email" placeholder="E-Mail Address" class="form-control" name="email" value="{{ old('email') }}" data-parsley-required data-parsley-type="email">
                                 @include('errors.field', ['fieldName' => 'email'])
                             </div>
                         </div>

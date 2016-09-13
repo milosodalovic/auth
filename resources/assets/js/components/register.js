@@ -7,16 +7,15 @@ Vue.component('register', {
 
     data: function () {
         return {
-            formValid: true,
             formBusy: false,
         };
     },
 
     methods: {
         onSubmit: function onSubmit(e) {
-            this.formValid = this.$validator.valid;
+            var formValid = $('form[data-parsley-validate]').parsley().validate();
 
-            if (this.formValid) {
+            if(formValid){
                 this.formBusy = true;
                 e.target.submit();
             }

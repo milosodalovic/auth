@@ -21,14 +21,16 @@ elixir(mix => {
 
     mix.styles([
         'resources/assets/css/app.css',
-        'resources/assets/css/lib/sweetalert.css',
+        'node_modules/sweetalert/dist/sweetalert.css',
     ],'public/css/all.css','./')
 
     mix.webpack('app.js','resources/assets/js/webpack-app.js')
 
     mix.scripts([
         'resources/assets/js/webpack-app.js',
-        'resources/assets/js/lib/sweetalert-dev.js',
+        'node_modules/sweetalert/dist/sweetalert-dev.js',
+        'node_modules/parsleyjs/dist/parsley.min.js',
+        'resources/assets/js/parsley-custom.js',
         'resources/assets/js/custom.js',
     ],'public/js/all.js','./')
 

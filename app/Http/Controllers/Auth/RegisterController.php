@@ -57,12 +57,18 @@ class RegisterController extends Controller
             'g-recaptcha-response.required' => 'Captcha is required!',
         ];
 
-        return Validator::make($data, [
+        $rules = [
             'name' => 'required|max:255',
             'email' => 'required|email|max:255|unique:users',
             'password' => 'required|confirmed|min:6',
-            'g-recaptcha-response' => 'required',
-        ], $messages);
+        ];
+
+        if(config('auth.options.captcha')){
+            $rules = $rules + ['g-recaptcha-response' => 'required',];
+            $messages = $messages + ['g-recaptcha-response.required' => 'Captcha is required!'];
+        }
+
+        return Validator::make($data, $rules, $messages);
     }
 
     /**

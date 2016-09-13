@@ -9169,6 +9169,38 @@ button.close {
 .custom-inline-group .checkbox:last-child {
   margin-bottom: 4px; }
 
+input.parsley-error,
+select.parsley-error,
+textarea.parsley-error {
+  border: 1px solid #a94442; }
+
+.parsley-errors-list {
+  margin: 2px 0 3px;
+  padding: 0;
+  list-style-type: none;
+  opacity: 0;
+  color: #a94442;
+  font-weight: bold;
+  transition: all .3s ease-in;
+  -o-transition: all .3s ease-in;
+  -moz-transition: all .3s ease-in;
+  -webkit-transition: all .3s ease-in; }
+
+.parsley-errors-list.filled {
+  opacity: 1; }
+
+.parsley-mindate {
+  color: #a94442; }
+
+.parsley-minlength {
+  color: #a94442; }
+
+.parsley-custom-error-message {
+  color: #a94442; }
+
+.parsley-pattern {
+  color: #a94442; }
+
 html {
   min-height: 100%; }
 
