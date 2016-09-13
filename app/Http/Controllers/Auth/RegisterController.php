@@ -29,13 +29,6 @@ class RegisterController extends Controller
     protected $redirectTo = '/home';
 
     /**
-     * Specify whether Email confirmation is required after registration
-     *
-     * @var boolean
-     */
-    protected $isUsingEmailConfirmation = true;
-
-    /**
      * Create a new controller instance.
      *
      * RegisterController constructor.
